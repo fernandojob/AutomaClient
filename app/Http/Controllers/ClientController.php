@@ -2,103 +2,114 @@
 
 namespace App\Http\Controllers;
 
+use TCPDF;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Response;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the clients.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    
     public function index()
     {
-        return response()->json(Client::all());
+        $clients = Client::all();
+        return Inertia::render('Clients/index', ['clients' => $clients]);
     }
 
-    /**
-     * Show the form for creating a new client.
-     */
+    
     public function create()
     {
-        // Retorna a view de criação (se for usar Blade)
-        // return view('clients.create');
+        return Inertia::render('Clients/Create');
     }
 
-    /**
-     * Store a newly created client in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:clients',
-            'phone' => 'required|string',
-            'address' => 'nullable|string'
+            'email' => 'required|email|unique:clients,email',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
         ]);
 
-        $client = Client::create($validated);
+        Client::create($validated);
 
-        return response()->json($client, 201);
+        return Redirect::route('clients.index')->with('success', 'Cliente cadastrado com sucesso!');
     }
 
-    /**
-     * Display the specified client.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show(string $id)
+    
+    public function edit(Client $client)
     {
-        return response()->json(Client::findOrFail($id));
+        return Inertia::render('Clients/Edit', [
+            'client' => $client,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified client.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Client $client)
     {
-        // Retorna a view de edição (se for usar Blade)
-        // return view('clients.edit', ['client' => Client::findOrFail($id)]);
-    }
-
-    /**
-     * Update the specified client in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request, string $id)
-    {
-        $client = Client::findOrFail($id);
-
         $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:clients,email,'.$client->id,
-            'phone' => 'sometimes|string',
-            'address' => 'nullable|string'
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:clients,email,' . $client->id,
+            'phone' => 'required|string|max:20',
+            'address' => 'nullable|string|max:255',
         ]);
 
         $client->update($validated);
 
-        return response()->json($client);
+        return Redirect::route('clients.index')->with('success', 'Cliente atualizado com sucesso!');
     }
 
-    /**
-     * Remove the specified client from storage.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy(string $id)
+    public function destroy(Client $client)
     {
-        Client::findOrFail($id)->delete();
+        $client->delete();
 
-        return response()->json(null, 204);
+        return Redirect::route('clients.index')->with('success', 'Cliente removido com sucesso!');
+    }
+
+    public function exportPdf()
+    {
+        // Obtém os clientes do banco de dados
+        $clients = Client::all();
+
+        // Criando novo PDF
+        $pdf = new TCPDF();
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('AutomaClient');
+        $pdf->SetTitle('Lista de Clientes');
+        $pdf->SetHeaderData('', 0, 'Lista de Clientes', '');
+
+        // Definindo margens
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->AddPage();
+
+        // Definindo o HTML do PDF
+        $html = '<h1>Lista de Clientes</h1>';
+        $html .= '<table border="1" cellspacing="0" cellpadding="5">';
+        $html .= '<tr>
+                    <th><strong>Nome</strong></th>
+                    <th><strong>Email</strong></th>
+                    <th><strong>Telefone</strong></th>
+                    <th><strong>Endereço</strong></th>
+                  </tr>';
+
+        foreach ($clients as $client) {
+            $html .= '<tr>
+                        <td>' . $client->name . '</td>
+                        <td>' . $client->email . '</td>
+                        <td>' . $client->phone . '</td>
+                        <td>' . $client->address . '</td>
+                      </tr>';
+        }
+
+        $html .= '</table>';
+
+        
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        
+        return response($pdf->Output('clientes.pdf', 'I'))
+            ->header('Content-Type', 'application/pdf');
     }
 }
