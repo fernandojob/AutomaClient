@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestEmail;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientPdfController;
@@ -42,6 +44,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
     });
 
+    Route::get('/send-test-email', function () {
+        Mail::to('teste@exemplo.com')->send(new TestEmail());
+        return redirect()->back()->with('success', 'E-mail enviado com sucesso!');
+    });
 
     Route::get('/clients/pdf', [ClientPdfController::class, 'generatePDF'])->name('clients.pdf');
 });
