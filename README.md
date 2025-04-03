@@ -1,25 +1,88 @@
-# Laravel + Vue Starter Kit
+# **AutomaClient – Sistema de Gestão de Clientes**  
 
-## Introduction
+![Laravel](https://img.shields.io/badge/Laravel-10-red?style=flat&logo=laravel)  ![Vue.js](https://img.shields.io/badge/Vue.js-3-green?style=flat&logo=vue.js)  ![MySQL](https://img.shields.io/badge/MySQL-Database-blue?style=flat&logo=mysql)  ![PHP](https://img.shields.io/badge/PHP-8+-purple?style=flat&logo=php)  
 
-Our Vue starter kit provides a robust, modern starting point for building Laravel applications with a Vue frontend using [Inertia](https://inertiajs.com).
+🚀 **AutomaClient** é um sistema de **gestão de clientes** que incorpora **automações avançadas** para otimizar processos. Desenvolvido com **Laravel 10** no backend e **Vue.js 3** no frontend, o projeto possui autenticação segura, um CRUD otimizado, API REST, envio automático de e-mails e geração de relatórios em PDF.  
 
-Inertia allows you to build modern, single-page Vue applications using classic server-side routing and controllers. This lets you enjoy the frontend power of Vue combined with the incredible backend productivity of Laravel and lightning-fast Vite compilation.
+---
 
-This Vue starter kit utilizes Vue 3 and the Composition API, TypeScript, Tailwind, and the [shadcn-vue](https://www.shadcn-vue.com) component library.
+## **📌 Funcionalidades**  
 
-## Official Documentation
+✅ **Autenticação Segura**  
+- Login com **Laravel Breeze**  
+- Controle de acesso com **middlewares**  
+- **Senhas hashadas** e proteção CSRF  
 
-Documentation for all Laravel starter kits can be found on the [Laravel website](https://laravel.com/docs/starter-kits).
+✅ **CRUD de Clientes**  
+- Cadastro, listagem, edição e remoção de clientes  
+- **Relacionamento entre clientes e pedidos**  
+- Busca otimizada com **indexes no MySQL**  
 
-## Contributing
+✅ **API REST**  
+- Endpoints estruturados (`GET/POST/PUT/DELETE`)  
+- Retorno padronizado em **JSON**  
 
-Thank you for considering contributing to our starter kit! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+✅ **Front-End com Vue.js 3**  
+- **Listagem dinâmica de clientes** (Axios + API REST)  
+- Interface moderna substituindo **Blade**  
 
-## Code of Conduct
+✅ **Automações Profissionais**  
+- **Envio automático de e-mails** (Laravel Mail)  
+- **Geração de relatórios em PDF** (DomPDF)  
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+✅ **Testes Básicos (Opcional)**  
+- Testes unitários para validar o CRUD de clientes  
 
-## License
+---
 
-The Laravel + Vue starter kit is open-sourced software licensed under the MIT license.
+## **⚙️ Tecnologias Utilizadas**  
+
+- **Back-end**: Laravel 10 (PHP 8+)  
+- **Banco de Dados**: MySQL  
+- **Front-end**: Vue.js 3 (Composition API) + Axios  
+- **Segurança**: Hash de senhas, proteção CSRF  
+- **Automações**: Laravel Mail (SMTP), DomPDF  
+- **Controle de Versão**: Git/GitHub  
+
+---
+
+## **🛠 Como Executar o Projeto**  
+
+### 🔹 **Pré-requisitos**  
+Certifique-se de ter instalado:  
+- **PHP 8+**  
+- **Composer**  
+- **Node.js + NPM**  
+- **MySQL**  
+
+### 🔹 **Passos**  
+
+1️⃣ Clone o repositório:  
+
+git clone https://github.com/seu-usuario/AutomaClient.git
+cd AutomaClient
+
+2️⃣ Instale as dependências do backend:
+
+composer install
+
+3️⃣ Instale as dependências do frontend:
+
+npm install
+
+4️⃣ Configure o banco de dados no .env e rode as migrations:
+
+php artisan migrate --seepiar
+
+5️⃣ Gere a chave da aplicação e inicie o servidor:<br>
+php artisan key:generate<br>
+php artisan serve
+
+6️⃣ Compile o frontend e inicie o Vite:
+
+npm run dev
+
+Agora o sistema estará rodando em http://localhost:8000 🚀
+
+### 📝 Licença
+Este projeto está sob a licença MIT.
