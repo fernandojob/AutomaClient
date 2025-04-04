@@ -2,11 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Mail;
+
 use App\Mail\TestEmail;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientPdfController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReportController;
+
+use App\Models\Client;
+
 use Illuminate\Foundation\Application;
 use Inertia\Inertia;
 
@@ -51,7 +56,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/clients/pdf', [ClientPdfController::class, 'generatePDF'])->name('clients.pdf');
+    Route::get('/send-clients-report', [ReportController::class, 'sendClientsReport']);
 
     Route::get('/clients/{clientId}/orders', [OrderController::class, 'index']);
     Route::post('/clients/{clientId}/orders', [OrderController::class, 'store']);
+
+    Route::get('/clients-with-orders', function () {
+        return Client::with('orders')->get();
+    });
 });
