@@ -6,6 +6,7 @@ use App\Mail\TestEmail;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientPdfController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Foundation\Application;
 use Inertia\Inertia;
 
@@ -50,4 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/clients/pdf', [ClientPdfController::class, 'generatePDF'])->name('clients.pdf');
+
+    Route::get('/clients/{clientId}/orders', [OrderController::class, 'index']);
+    Route::post('/clients/{clientId}/orders', [OrderController::class, 'store']);
 });
