@@ -8,6 +8,9 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 
+
+import ClientsOrders from '@/Components/ClientsOrders.vue';
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -20,11 +23,14 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) });
 
-        //notificacao
+        
         app.use(Toast, {
             position: POSITION.TOP_RIGHT,
             timeout: 3000, 
         });
+
+        
+        app.component('clients-orders', ClientsOrders);
 
         app.use(plugin)
             .use(ZiggyVue)
